@@ -18,13 +18,17 @@ on:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.os }} for ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         # windows is tested on azure for now
         os: [ubuntu-20.04, windows-2019, macos-10.15]
+        arch: [auto]
+        include:
+          - os: ubuntu-20.04
+            arch: aarch64
     steps:
       - uses: actions/checkout@v2
 
@@ -33,10 +37,8 @@ jobs:
         run: choco install swig -f -y
 
       - name: Set up QEMU
-        if: runner.os == 'Linux'
+        if: ${{ matrix.arch == 'aarch64' }}
         uses: docker/setup-qemu-action@v1
-        with:
-          platforms: all
 
       - name: Get versions
         id: version
@@ -57,7 +59,7 @@ jobs:
           CIBW_BEFORE_BUILD_MACOS: source {project}/config.sh && IS_OSX=true pre_build
           CIBW_BEFORE_BUILD_WINDOWS: rm -rf glpk_build && python scripts/build_glpk.py
           CIBW_ARCHS_MACOS: "x86_64"  # GLPK will not compile on silicon
-          CIBW_ARCHS_LINUX: "auto"
+          CIBW_ARCHS_LINUX: ${{ matrix.arch }}
           CIBW_SKIP: pp*-win* *-musllinux*
           # install before tests
           CIBW_TEST_COMMAND: cp {project}/test_swiglpk.py . && python test_swiglpk.py
