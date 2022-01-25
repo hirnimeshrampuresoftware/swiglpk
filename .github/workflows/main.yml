@@ -46,7 +46,7 @@ jobs:
           CIBW_BEFORE_BUILD_WINDOWS: rm -rf glpk_build && python scripts/build_glpk.py
           CIBW_ARCHS_MACOS: "x86_64"  # GLPK will not compile on silicon
           CIBW_ARCHS_LINUX: ${{ matrix.arch }}
-          CIBW_SKIP: pp*-win* *-musllinux*
+          CIBW_SKIP: pp*-win* *-musllinux* cp36-*_aarch64
           # install before tests
           CIBW_TEST_COMMAND: cp {project}/test_swiglpk.py . && python test_swiglpk.py
 
