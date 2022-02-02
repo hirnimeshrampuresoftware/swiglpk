@@ -25,6 +25,20 @@ jobs:
       - name: Set up QEMU
         if: ${{ matrix.arch == 'aarch64' }}
         uses: docker/setup-qemu-action@v1
+        
+      - uses: actions/cache@v2
+        id: deps-cache
+        with:
+          path: swiglpk_build
+          key: ${{ runner.os }}-${{ matrix.arch }}-deps-cache-${{ hashFiles('**/config.sh') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.arch }}-deps-cache
+      - name: Build dependencies
+        if: ${{ steps.deps-cache.outputs.cache-hit != 'true' }}
+        run: |
+          rm -rf kivy_build
+          docker run --rm -v `pwd`:/root:rw --workdir=/root \
+           quay.io/pypa/manylinux2014_aarch64 bash -ec 'source config.sh && pre_build'
 
       - name: Get versions
         id: version
@@ -41,7 +55,23 @@ jobs:
           CIBW_ENVIRONMENT_LINUX: GLPK_HEADER_PATH=/include
           # install swig before build in each python environment
           # each job runs a python environment so this is equivalent to CIBW_BEFORE_ALL
-          CIBW_BEFORE_BUILD_LINUX: source {project}/config.sh && pre_build
+          CIBW_BEFORE_BUILD_LINUX: >
+                mv `pwd`/swiglpk_build $HOME &&
+                yum install -y pcre-devel gmp-devel &&
+                curl -O -L http://downloads.sourceforge.net/swig/swig-3.0.10.tar.gz &&
+                tar xzf swig-3.0.10.tar.gz &&
+                cd swig-3.0.10 &&
+				./configure --prefix=$BUILD_PREFIX &&
+                make &&
+                make install &&
+		        pip install requests &&
+                export NEW_GLPK_VERSION=$(python scripts/find_newest_glpk_release.py) &&
+                curl -O "http://ftp.gnu.org/gnu/glpk/glpk-$NEW_GLPK_VERSION.tar.gz" &&
+                tar xzf "glpk-$NEW_GLPK_VERSION.tar.gz"
+                cd "glpk-$NEW_GLPK_VERSION" &&
+                ./configure --disable-reentrant --prefix=$BUILD_PREFIX --with-gmp &&
+                make &&
+                make install &&
           CIBW_BEFORE_BUILD_MACOS: source {project}/config.sh && IS_OSX=true pre_build
           CIBW_BEFORE_BUILD_WINDOWS: rm -rf glpk_build && python scripts/build_glpk.py
           CIBW_ARCHS_MACOS: "x86_64"  # GLPK will not compile on silicon
