@@ -21,7 +21,7 @@ function pre_build {
 				&& ./configure --prefix=$BUILD_PREFIX \
 				&& make \
 				&& make install)
-		pip install requests
+		pip3 install requests
     export NEW_GLPK_VERSION=$(python scripts/find_newest_glpk_release.py)
 	fi
 	echo "Downloading http://ftp.gnu.org/gnu/glpk/glpk-$NEW_GLPK_VERSION.tar.gz"
