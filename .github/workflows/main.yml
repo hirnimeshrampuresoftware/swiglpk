@@ -61,10 +61,10 @@ jobs:
                 curl -O -L http://downloads.sourceforge.net/swig/swig-3.0.10.tar.gz &&
                 tar xzf swig-3.0.10.tar.gz &&
                 cd swig-3.0.10 &&
-				./configure --prefix=$BUILD_PREFIX &&
+		./configure --prefix=$BUILD_PREFIX &&
                 make &&
                 make install &&
-		        pip install requests &&
+		pip install requests &&
                 export NEW_GLPK_VERSION=$(python scripts/find_newest_glpk_release.py) &&
                 curl -O "http://ftp.gnu.org/gnu/glpk/glpk-$NEW_GLPK_VERSION.tar.gz" &&
                 tar xzf "glpk-$NEW_GLPK_VERSION.tar.gz"
