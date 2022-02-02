@@ -11,7 +11,7 @@ jobs:
       matrix:
         # windows is tested on azure for now
         os: [ubuntu-20.04, windows-2019, macos-10.15]
-        arch: [auto]
+        arch: [x86_64]
         include:
           - os: ubuntu-20.04
             arch: aarch64
@@ -38,7 +38,7 @@ jobs:
         run: |
           rm -rf swiglpk_build
           docker run --rm -v `pwd`:/root:rw --workdir=/root \
-           quay.io/pypa/manylinux2014_aarch64 bash -ec 'source config.sh && pre_build'
+           quay.io/pypa/manylinux2014_${{ matrix.arch }} bash -ec 'source config.sh && pre_build'
 
       - name: Get versions
         id: version
