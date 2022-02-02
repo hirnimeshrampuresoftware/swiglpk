@@ -72,7 +72,7 @@ jobs:
                 cd "glpk-$NEW_GLPK_VERSION" &&
                 ./configure --disable-reentrant --prefix=$BUILD_PREFIX --with-gmp &&
                 make &&
-                make install &&
+                make install
           CIBW_BEFORE_BUILD_MACOS: source {project}/config.sh && IS_OSX=true pre_build
           CIBW_BEFORE_BUILD_WINDOWS: rm -rf glpk_build && python scripts/build_glpk.py
           CIBW_ARCHS_MACOS: "x86_64"  # GLPK will not compile on silicon
