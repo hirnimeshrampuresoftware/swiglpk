@@ -36,7 +36,7 @@ jobs:
       - name: Build dependencies
         if: ${{ steps.deps-cache.outputs.cache-hit != 'true' }}
         run: |
-          rm -rf kivy_build
+          rm -rf swiglpk_build
           docker run --rm -v `pwd`:/root:rw --workdir=/root \
            quay.io/pypa/manylinux2014_aarch64 bash -ec 'source config.sh && pre_build'
 
