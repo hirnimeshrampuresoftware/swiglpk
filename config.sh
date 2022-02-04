@@ -15,6 +15,7 @@ function pre_build {
     else
         yum install -y pcre-devel gmp-devel
 		# yum install automake
+	mkdir -p $HOME/swiglpk_build
         curl -O -L http://downloads.sourceforge.net/swig/swig-3.0.10.tar.gz
         tar xzf swig-3.0.10.tar.gz
         (cd swig-3.0.10 \
