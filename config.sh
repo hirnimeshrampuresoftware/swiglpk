@@ -13,18 +13,12 @@ function pre_build {
         brew install swig # automake
         brew install gmp
     else
-    	echo "BUILD_PREFIX value issssssssss $BUILD_PREFIX"
-	echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	echo "$BUILD_PREFIX"
-	echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-	echo $BUILD_PREFIX
-	echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
         yum install -y pcre-devel gmp-devel
 		# yum install automake
         curl -O -L http://downloads.sourceforge.net/swig/swig-3.0.10.tar.gz
         tar xzf swig-3.0.10.tar.gz
         (cd swig-3.0.10 \
-				&& ./configure --prefix=$BUILD_PREFIX \
+				&& ./configure --prefix=$HOME/swiglpk_build \
 				&& make \
 				&& make install)
 		pip3 install requests
@@ -34,7 +28,7 @@ function pre_build {
     curl -O "http://ftp.gnu.org/gnu/glpk/glpk-$NEW_GLPK_VERSION.tar.gz"
     tar xzf "glpk-$NEW_GLPK_VERSION.tar.gz"
     (cd "glpk-$NEW_GLPK_VERSION" \
-            && ./configure --disable-reentrant --prefix=$BUILD_PREFIX --with-gmp\
+            && ./configure --disable-reentrant --prefix=$HOME/swiglpk_build --with-gmp\
             && make \
             && make install) || cat "glpk-$NEW_GLPK_VERSION/config.log"
     echo "Installed to $BUILD_PREFIX"
