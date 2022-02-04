@@ -39,7 +39,6 @@ jobs:
           rm -rf swiglpk_build
           docker run --rm -v `pwd`:/root:rw --workdir=/root \
            quay.io/pypa/manylinux2014_${{ matrix.arch }} bash -ec 'yum install -y python3 python3-pip &&
-                                            touch $HOME/swiglpk_build &&
                                             source config.sh && pre_build'
 
       - name: Get versions
