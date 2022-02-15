@@ -34,7 +34,9 @@ function pre_build {
             && make install) || cat "glpk-$NEW_GLPK_VERSION/config.log"
     echo "Installed to $BUILD_PREFIX"
     ls -ls .
+    chmod +x .pki
     cd glpk-5.0
+    chmod +x autogen.sh
     ls -ls .
     cd ..
 }
