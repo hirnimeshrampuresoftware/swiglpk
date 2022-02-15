@@ -38,9 +38,4 @@ function pre_build {
     echo "Installed to $BUILD_PREFIX"
     rm -rf ~/swig_source
     ls -ls .
-    chmod +x .pki
-    cd glpk-5.0
-    chmod +x autogen.sh
-    ls -ls .
-    cd ..
 }
