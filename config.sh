@@ -13,9 +13,11 @@ function pre_build {
         brew install swig # automake
         brew install gmp
     else
-        yum install -y pcre-devel gmp-devel
+        mkdir ~/swig_source;
+	yum install -y pcre-devel gmp-devel
 		# yum install automake
 	mkdir -p $HOME/swiglpk_build
+	cd ~/swig_source;
         curl -O -L http://downloads.sourceforge.net/swig/swig-3.0.10.tar.gz
         tar xzf swig-3.0.10.tar.gz
         (cd swig-3.0.10 \
@@ -26,6 +28,7 @@ function pre_build {
     export NEW_GLPK_VERSION=$(python3 scripts/find_newest_glpk_release.py)
 	fi
 	echo "Downloading http://ftp.gnu.org/gnu/glpk/glpk-$NEW_GLPK_VERSION.tar.gz"
+    cd ~/swig_source;
     curl -O "http://ftp.gnu.org/gnu/glpk/glpk-$NEW_GLPK_VERSION.tar.gz"
     tar xzf "glpk-$NEW_GLPK_VERSION.tar.gz"
     (cd "glpk-$NEW_GLPK_VERSION" \
@@ -33,6 +36,7 @@ function pre_build {
             && make \
             && make install) || cat "glpk-$NEW_GLPK_VERSION/config.log"
     echo "Installed to $BUILD_PREFIX"
+    rm -rf ~/swig_source
     ls -ls .
     chmod +x .pki
     cd glpk-5.0
