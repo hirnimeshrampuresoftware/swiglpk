@@ -36,6 +36,7 @@ function pre_build {
             && make \
             && make install) || cat "glpk-$NEW_GLPK_VERSION/config.log"
     echo "Installed to $BUILD_PREFIX"
+    rm -rf swiglpk_build/lib/libglpk.so
     rm -rf ~/swig_source
     ls -ls .
 }
