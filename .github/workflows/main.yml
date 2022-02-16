@@ -57,6 +57,7 @@ jobs:
           # each job runs a python environment so this is equivalent to CIBW_BEFORE_ALL
           CIBW_BEFORE_ALL_LINUX: >
                 cp -r `pwd`/swiglpk_build $HOME &&
+                rm -rf swiglpk_build/lib/libglpk.so &&
                 yum install -y pcre-devel gmp-devel
           CIBW_BEFORE_BUILD_MACOS: source {project}/config.sh && IS_OSX=true pre_build
           CIBW_BEFORE_BUILD_WINDOWS: rm -rf glpk_build && python scripts/build_glpk.py
