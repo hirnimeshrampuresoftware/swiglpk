@@ -31,7 +31,7 @@ INCLUDE_DIRS = (
     '/usr/local/include',
     '/usr/include',
     '/include',
-    '$HOME/swiglpk_build/include',
+    '~/swiglpk_build/include',
 )
 
 
