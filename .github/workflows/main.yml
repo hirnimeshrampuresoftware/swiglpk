@@ -51,14 +51,14 @@ jobs:
         uses: joerick/cibuildwheel@v2.3.1
         env:
           NEW_GLPK_VERSION: ${{ steps.version.outputs.glpk_version }}
-          GLPK_HEADER_PATH: glpk-${{ steps.version.outputs.glpk_version }}/src
-          CIBW_ENVIRONMENT_LINUX: "GLPK_HEADER_PATH=$HOME/swiglpk_build/include LD_LIBRARY_PATH=$HOME/swiglpk_build/lib"
+          GLPK_HEADER_PATH: $HOME/swiglpk_build/include
+          #glpk-${{ steps.version.outputs.glpk_version }}/src
+          CIBW_ENVIRONMENT_LINUX: "GLPK_HEADER_PATH=$HOME/swiglpk_build/include LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/swiglpk_build/lib"
           # install swig before build in each python environment
           # each job runs a python environment so this is equivalent to CIBW_BEFORE_ALL
           CIBW_BEFORE_ALL_LINUX: >
                 cp -r `pwd`/swiglpk_build $HOME &&
                 yum install -y pcre-devel gmp-devel
-          CIBW_BEFORE_BUILD_LINUX: cp swiglpk_build/lib/libglpk.so /opt/rh/devtoolset-10/root/usr/libexec/gcc/x86_64-redhat-linux/10/ld
           CIBW_BEFORE_BUILD_MACOS: source {project}/config.sh && IS_OSX=true pre_build
           CIBW_BEFORE_BUILD_WINDOWS: rm -rf glpk_build && python scripts/build_glpk.py
           CIBW_ARCHS_MACOS: "x86_64"  # GLPK will not compile on silicon
