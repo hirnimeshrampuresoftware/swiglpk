@@ -58,7 +58,7 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: >
                 cp -r `pwd`/swiglpk_build $HOME &&
                 yum install -y pcre-devel gmp-devel
-          CIBW_BEFORE_BUILD_LINUX: rm -rf swiglpk_build/lib/libglpk.so
+          CIBW_BEFORE_BUILD_LINUX: cp swiglpk_build/lib/libglpk.so /opt/rh/devtoolset-10/root/usr/libexec/gcc/x86_64-redhat-linux/10/ld
           CIBW_BEFORE_BUILD_MACOS: source {project}/config.sh && IS_OSX=true pre_build
           CIBW_BEFORE_BUILD_WINDOWS: rm -rf glpk_build && python scripts/build_glpk.py
           CIBW_ARCHS_MACOS: "x86_64"  # GLPK will not compile on silicon
